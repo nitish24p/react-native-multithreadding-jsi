@@ -19,6 +19,8 @@ target 'MultithreaddingLiteExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'react-native-multithreadding-lite', :path => '../..'
+
   target 'MultithreaddingLiteExampleTests' do
     inherit! :complete
     # Pods for testing

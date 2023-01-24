@@ -1,7 +1,40 @@
 #import "MultithreaddingLite.h"
 
+#import <React/RCTBridge+Private.h>
+#import <React/RCTUtils.h>
+#import <ReactCommon/RCTTurboModule.h>
+#import <jsi/jsi.h>
+
+
 @implementation MultithreaddingLite
+@synthesize bridge = _bridge;
 RCT_EXPORT_MODULE()
+
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
+- (void)setBridge:(RCTBridge *)bridge
+{
+  _bridge = bridge;
+  
+  RCTCxxBridge *cxxBridge = (RCTCxxBridge *)self.bridge;
+  if (!cxxBridge.runtime) {
+    return;
+  }
+  auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+    if (jsiRuntime == nil) {
+      return ;
+    }
+
+  auto &runtime = *jsiRuntime;
+  auto callInvoker = bridge.jsCallInvoker;
+  
+    
+  // You can call the install method here
+  multithreaddinglite::install(runtime, callInvoker);
+}
 
 // Example method
 // See // https://reactnative.dev/docs/native-modules-ios
